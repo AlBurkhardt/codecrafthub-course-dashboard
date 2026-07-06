@@ -1,10 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- Meta: Character encoding and viewport settings for proper rendering -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CodeCraftHub: Your Learning Management Platform</title>
+    
+    <!-- Embedded CSS for styling the dashboard -->
     <style>
+        /* Global styles */
         body {
             font-family: sans-serif;
             background-color: #f3f4f6;
@@ -12,44 +16,64 @@
             margin: 0;
             padding: 0;
         }
+        
+        /* Header styling */
         header {
             background-color: #8B5CF6;
             color: white;
             padding: 20px;
             text-align: center;
         }
+        
+        /* Main container */
         .container {
             padding: 20px;
         }
+        
+        /* Form field spacing */
         .form-group {
             margin-bottom: 15px;
         }
+        
+        /* Form labels */
         label {
             display: block;
             margin-bottom: 5px;
         }
+        
+        /* Form inputs and controls */
         input, textarea, select {
             width: 100%;
             padding: 8px;
             box-sizing: border-box;
         }
+        
+        /* Button base styles */
         button {
             padding: 10px 15px;
             border: none;
             cursor: pointer;
         }
+        
+        /* Primary button (purple) - for form submission */
         .btn-primary {
             background-color: #8B5CF6;
             color: white;
         }
+        
+        /* Success button (orange) - for edit actions */
         .btn-success {
             background-color: #F59E0B;
             color: white;
         }
+        
+        /* Danger button (red) - for delete actions */
         .btn-danger {
             background-color: #EF4444;
             color: white;
         }
+        
+        /* Individual course card display */
         .course-card {
             background-color: white;
             padding: 15px;
@@ -57,25 +81,35 @@
             border-radius: 5px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
+        
+        /* Loading indicator */
         .loading {
             display: none;
             text-align: center;
             margin: 20px 0;
         }
+        
+        /* Alert messages */
         .error, .success {
             display: none;
             padding: 10px;
             margin-bottom: 15px;
             border-radius: 5px;
         }
+        
+        /* Error alert styling */
         .error {
             background-color: #EF4444;
             color: white;
         }
+        
+        /* Success alert styling */
         .success {
             background-color: #F59E0B;
             color: white;
         }
+        
+        /* Mobile responsive design */
         @media (max-width: 600px) {
             .form-group {
                 margin-bottom: 10px;
@@ -84,14 +118,21 @@
     </style>
 </head>
 <body>
+    <!-- Header section -->
     <header>
         <h1>CodeCraftHub: Your Learning Management Platform</h1>
     </header>
+    
+    <!-- Main content container -->
     <div class="container">
+        <!-- Course creation form section -->
         <div class="form-group">
             <h2>Add New Course</h2>
+            <!-- Alert messages for form feedback -->
             <div class="error" id="formError"></div>
             <div class="success" id="formSuccess"></div>
+            
+            <!-- Form for creating new courses -->
             <form id="courseForm">
                 <div class="form-group">
                     <label for="name">Course Name</label>
@@ -116,21 +157,35 @@
                 <button type="submit" class="btn-primary">Add Course</button>
             </form>
         </div>
+        
+        <!-- Loading indicator -->
         <div class="loading" id="loading">Loading...</div>
+        
+        <!-- Container where courses are dynamically rendered -->
         <div id="coursesList"></div>
     </div>
+    
+    <!-- JavaScript: Handles all API interactions and UI logic -->
     <script>
+        // API endpoint for the CodeCraftHub courses service
         const apiUrl = 'http://localhost:5000/api/courses';
 
+        /**
+         * Initialize the dashboard when the page loads
+         */
         document.addEventListener('DOMContentLoaded', () => {
             fetchCourses();
 
+            // Attach form submission handler
             document.getElementById('courseForm').addEventListener('submit', function(event) {
                 event.preventDefault();
                 addCourse();
             });
         });
 
+        /**
+         * Fetches all courses from the API and displays them
+         */
         function fetchCourses() {
             toggleLoading(true);
             fetch(apiUrl)
@@ -151,6 +206,11 @@
                 });
         }
 
+        /**
+         * Renders the list of courses as interactive cards
+         * Each card displays course info and action buttons
+         * @param {Array} courses - Array of course objects from the API
+         */
         function displayCourses(courses) {
             const coursesList = document.getElementById('coursesList');
             coursesList.innerHTML = '';
@@ -170,6 +230,10 @@
             });
         }
 
+        /**
+         * Collects form data and sends a POST request to create a new course
+         * Validates required fields and handles the API response
+         */
         function addCourse() {
             const name = document.getElementById('name').value;
             const description = document.getElementById('description').value;
@@ -210,11 +274,20 @@
             });
         }
 
+        /**
+         * Placeholder for course editing functionality
+         * TODO: Implement inline or modal editing logic
+         * @param {number} id - The ID of the course to edit
+         */
         function editCourse(id) {
-            // Implement inline or modal editing logic here
             alert('Edit functionality is not implemented yet.');
         }
 
+        /**
+         * Sends a DELETE request to remove a course
+         * Refreshes the course list after successful deletion
+         * @param {number} id - The ID of the course to delete
+         */
         function deleteCourse(id) {
             toggleLoading(true);
             fetch(`${apiUrl}/${id}`, {
@@ -238,11 +311,19 @@
             });
         }
 
+        /**
+         * Shows or hides the loading indicator
+         * @param {boolean} show - Whether to display the loading message
+         */
         function toggleLoading(show) {
             const loading = document.getElementById('loading');
             loading.style.display = show ? 'block' : 'none';
         }
 
+        /**
+         * Displays an error message to the user for 3 seconds
+         * @param {string} message - The error message to display
+         */
         function showError(message) {
             const errorDiv = document.getElementById('formError');
             errorDiv.textContent = message;
@@ -250,6 +331,10 @@
             setTimeout(() => errorDiv.style.display = 'none', 3000);
         }
 
+        /**
+         * Displays a success message to the user for 3 seconds
+         * @param {string} message - The success message to display
+         */
         function showSuccess(message) {
             const successDiv = document.getElementById('formSuccess');
             successDiv.textContent = message;
